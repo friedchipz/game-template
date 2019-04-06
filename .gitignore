@@ -33,3 +33,9 @@
 
 #exclude engine
 engine/**
+
+#exclude vscode
+.vscode/**
+
+#exclude game specific configuration
+GameConfig.mk

@@ -9,26 +9,29 @@ INCDIR	:= $(ROOT)/include
 SRCDIR	:= $(ROOT)/src
 OBJDIR	:= $(ROOT)/obj
 
-SRC		= $(notdir $(wildcard $(SRCDIR)/*.cpp ))
+SRC		:= $(notdir $(wildcard $(SRCDIR)/*.cpp ))
 OBJ		:= $(addprefix $(OBJDIR)/, $(patsubst %.cpp, %.o, $(SRC)))
 LIBRARIES	:= -lm -lSDL2main
 
 
-.PHONY : cook engine clean veryclean directories linkggame game
+.PHONY : cook engine clean veryclean linkggame game
 
 cook: launcher
 	## do things for packaging
 
 launcher: game
 	## do this g++ whatever in launcher/main.cpp ...
+	mkdir -p bin
 	$(CPP) $(CPP_FLAGS) -D GAME=$(GAME) -D GAME_HEADER=\"$(GAME).h\" -I$(INCDIR) -Iengine/include -I$(SDL_INCLUDE) -L$(SDL_LIB) -L$(LIBDIR) launcher/main.cpp -o $(BINDIR)/$(GAME) $(LIBRARIES) -lSDL2 -lEngine -lGame
 
 game: engine linkgame
 
 linkgame: $(OBJ)
+	mkdir -p lib
 	$(CPP) $(CPP_FLAGS) -shared -L$(SDL_LIB) -L$(LIBDIR) $^ -o $(LIBDIR)/$(GAME_TARGET) $(LIBRARIES) -lSDL2 -lEngine
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
+	mkdir -p obj
 	$(CPP) $(CPP_FLAGS) -I$(INCDIR) -I$(SDL_INCLUDE) -L$(SDL_LIB) -c -o $@ $<	
 
 engine:
@@ -47,18 +50,7 @@ clean:
 	$(RM) -r $(OBJDIR)
 	if [ -d engine ]; then cd engine && make clean; fi
 
-directories:
-	@mkdir -p $(OBJDIR)
-	@mkdir -p $(BINDIR)
-	@mkdir -p $(LIBDIR)
-
-
 ## still pending of review below this line
-
 
 veryclean: clean
 	$(RM) -r $(BINDIR)
-
-##link: $(OBJ)
-##	$(CPP) $(CPP_FLAGS) -I$(INCDIR) -I$(SDL_INCLUDE) -L$(SDL_LIB) $^ -o $(BINDIR)/$(EXECUTABLE) $(LIBRARIES) -lSDL2
-##	@cp $(libsdl) $(BINDIR)/

@@ -13,7 +13,7 @@
 
 GAME			:= 
 ENGINE_ORIGIN	:= git@github.com:friedchipz/engine.git
-ENGINE_VERION	:= master
+ENGINE_VERSION	:= master
 
 ## probably you won't need to edit anything below this.
 
