@@ -1,12 +1,15 @@
 #!/bin/bash
 
-#create directories
-mkdir -p src include
-
 #set for project name
 read -p "Provide the game name (will be used as main GameMode class name also): " gamename
 gamename=$(echo $gamename | sed -e 's/[ \t]/_/g' | sed -e 's/__/_/g')
 if [ "$gamename" == "" ]; then gamename="NewGame"; fi
+
+#setup new branch for game
+git checkout -b $gamename
+
+#create directories
+mkdir -p src include
 
 #create the header for main gamemode
 cat > include/$gamename.h <<EOF

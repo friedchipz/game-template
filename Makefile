@@ -21,18 +21,14 @@ cook: launcher
 
 launcher: game
 	## do this g++ whatever in launcher/main.cpp ...
-	mkdir -p bin
+	@mkdir -p bin
 	$(CPP) $(CPP_FLAGS) -D GAME=$(GAME) -D GAME_HEADER=\"$(GAME).h\" -I$(INCDIR) -Iengine/include -I$(SDL_INCLUDE) -L$(SDL_LIB) -L$(LIBDIR) launcher/main.cpp -o $(BINDIR)/$(GAME) $(LIBRARIES) -lSDL2 -lEngine -lGame
 
 game: engine linkgame
 
 linkgame: $(OBJ)
-	mkdir -p lib
+	@mkdir -p lib
 	$(CPP) $(CPP_FLAGS) -shared -L$(SDL_LIB) -L$(LIBDIR) $^ -o $(LIBDIR)/$(GAME_TARGET) $(LIBRARIES) -lSDL2 -lEngine
-
-$(OBJDIR)/%.o : $(SRCDIR)/%.cpp
-	mkdir -p obj
-	$(CPP) $(CPP_FLAGS) -I$(INCDIR) -I$(SDL_INCLUDE) -L$(SDL_LIB) -c -o $@ $<	
 
 engine:
 	if [ ! -d engine ]; then git clone $(ENGINE_ORIGIN); fi
@@ -44,6 +40,7 @@ engine:
 	ln -f -s ../engine/lib/$(ENGINE_TARGET) lib/$(ENGINE_TARGET)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
+	@mkdir -p obj
 	$(CPP) $(CPP_FLAGS) -I$(INCDIR) -I$(SDL_INCLUDE) -Iengine/include -c -o $@ $<
 
 clean:
