@@ -27,7 +27,7 @@ EOF
 #create the source for main gamemode
 cat > src/$gamename.cpp <<EOF
 #include <GameMode.h>
-#include <${gamename}.h>
+#include "${gamename}.h"
 
 ${gamename}::${gamename}(){
     gameName = "${gamename}";
